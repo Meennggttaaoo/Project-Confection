@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Project Confection</title>
+   <!-- Tailwind CSS for styling -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <!-- React and Babel for running JSX in the browser -->
+   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+   <!-- Lucide Icons -->
+   <script src="https://unpkg.com/lucide@latest"></script>
+   <style>
+       @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+       body { font-family: 'Press Start 2P', cursive; margin: 0; }
+   </style>
+</head>
+<body>
+   <div id="root"></div>
+
+
+   <script type="text/babel">
+       // Import icons manually for the browser-based React
+       const { useState } = React;
+       const { X, Sparkles, Settings, Cloud, Users, Briefcase } = lucide;
+
+
+       // --- Pixel Art Components ---
+       const PixelRect = ({ x, y, size = 4, color }) => (
+         <rect x={x * size} y={y * size} width={size} height={size} fill={color} />
+       );
+
+
+       const PixelCookie = ({ className }) => {
+         const base = "#d2b48c"; const chip = "#4b3621";
+         return (
+           <svg viewBox="0 0 48 48" className={className}>
+             {[
+               [4,2],[5,2],[6,2],[7,2],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[9,3],
+               [2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[1,5],[2,5],[3,5],[4,5],
+               [5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[1,6],[2,6],[3,6],[4,6],[5,6],[6,6],
+               [7,6],[8,6],[9,6],[10,6],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],
+               [4,8],[5,8],[6,8],[7,8]
+             ].map(([x, y], i) => <PixelRect key={i} x={x} y={y} color={base} size={4} />)}
+             <PixelRect x={3} y={4} color={chip} /> <PixelRect x={8} y={4} color={chip} />
+             <PixelRect x={5} y={6} color={chip} /> <PixelRect x={2} y={6} color={chip} />
+             <PixelRect x={7} y={7} color={chip} />
+           </svg>
+         );
+       };
+
+
+       const PixelCandy = ({ className }) => {
+         const wrapper = "#ffcc00"; const center = "#00d2ff"; const highlight = "rgba(255,255,255,0.5)";
+         return (
+           <svg viewBox="0 0 64 48" className={className}>
+             <PixelRect x={1} y={4} color={wrapper} /><PixelRect x={1} y={7} color={wrapper} />
+             <PixelRect x={2} y={5} color={wrapper} /><PixelRect x={2} y={6} color={wrapper} />
+             <PixelRect x={3} y={5} color={wrapper} /><PixelRect x={3} y={6} color={wrapper} />
+             <PixelRect x={13} y={4} color={wrapper} /><PixelRect x={13} y={7} color={wrapper} />
+             <PixelRect x={12} y={5} color={wrapper} /><PixelRect x={12} y={6} color={wrapper} />
+             <PixelRect x={11} y={5} color={wrapper} /><PixelRect x={11} y={6} color={wrapper} />
+             {Array.from({ length: 6 }).map((_, x) =>
+               Array.from({ length: 6 }).map((_, y) => (
+                 <PixelRect key={`${x}-${y}`} x={x + 5} y={y + 3} color={center} size={4} />
+               ))
+             )}
+             <PixelRect x={6} y={4} color={highlight} />
+           </svg>
+         );
+       };
+
+
+       const PixelChocolate = ({ className }) => {
+         const bar = "#6d4c41"; const dark = "#3e2723";
+         return (
+           <svg viewBox="0 0 48 48" className={className}>
+             {Array.from({ length: 8 }).map((_, x) =>
+               Array.from({ length: 10 }).map((_, y) => (
+                 <PixelRect key={`${x}-${y}`} x={x + 2} y={y + 1} color={bar} size={4} />
+               ))
+             )}
+             <PixelRect x={2} y={4} color={dark} /><PixelRect x={9} y={4} color={dark} />
+             <PixelRect x={2} y={7} color={dark} /><PixelRect x={9} y={7} color={dark} />
+             {Array.from({ length: 8 }).map((_, x) => <PixelRect key={x} x={x + 2} y={4} color={dark} size={4} />)}
+             {Array.from({ length: 8 }).map((_, x) => <PixelRect key={x} x={x + 2} y={7} color={dark} size={4} />)}
+             {Array.from({ length: 10 }).map((_, y) => <PixelRect key={y} x={5} y={y + 1} color={dark} size={4} />)}
+           </svg>
+         );
+       };
+
+
+       const PixelLollipop = ({ className }) => {
+         const stick = "#ffffff"; const candy = "#ff4d6d"; const swirl = "#fff";
+         return (
+           <svg viewBox="0 0 48 48" className={className}>
+             {[5,6,7,8,9].map(y => <PixelRect key={y} x={5} y={y + 2} color={stick} size={4} />)}
+             {[
+               [4,1],[5,1],[6,1],[7,1],[3,2],[4,2],[5,2],[6,2],[7,2],[8,2],
+               [2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[9,3],[2,4],[3,4],
+               [4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[3,5],[4,5],[5,5],[6,5],
+               [7,5],[8,5],[4,6],[5,6],[6,6],[7,6]
+             ].map(([x, y], i) => <PixelRect key={i} x={x} y={y} color={candy} size={4} />)}
+             <PixelRect x={4} y={3} color={swirl} />
+             <PixelRect x={7} y={4} color={swirl} />
+           </svg>
+         );
+       };
+
+
+       const PixelCupcake = ({ className }) => {
+         const wrapper = "#00d2ff"; const frosting = "#ffffff"; const cherry = "#ff4d6d";
+         return (
+           <svg viewBox="0 0 48 48" className={className}>
+             {[
+               [4,6],[5,6],[6,6],[7,6],[3,7],[4,7],[5,7],[6,7],[7,7],[8,7],
+               [3,8],[4,8],[5,8],[6,8],[7,8],[8,8]
+             ].map(([x, y], i) => <PixelRect key={i} x={x} y={y} color={wrapper} size={4} />)}
+             {[
+               [4,4],[5,4],[6,4],[7,4],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5]
+             ].map(([x, y], i) => <PixelRect key={i} x={x} y={y} color={frosting} size={4} />)}
+             <PixelRect x={5} y={3} color={cherry} />
+           </svg>
+         );
+       };
+
+
+       // --- Data ---
+       const JOURNEY_DATA = {
+         mcc: {
+           1: { objectives: "Establish foundational structure and define the change approach/journey.", activities: ["Client research/discovery: Artifact dig (websites, resources)", "Review sales-related resources and inputs", "Attend internal handoff and readiness meetings", "Develop change profile: Confirm sponsor and key leaders", "Assess case for change and define change approach", "Initiate change artifacts: Initiate C&T plan"], outputs: ["Client change profile", "Change approach", "Executive sponsor identified", "C&T plan customizations"] },
+           2: { objectives: "Establish project foundation and secure executive alignment to define the initial change management strategy.", activities: ["Support development of kickoff deck and delivery", "Schedule/conduct sponsor alignment meeting", "Schedule/conduct key stakeholder interviews", "Conduct assessments (Tech environment, Application inventory, Org Readiness, Maturity, Security, Training)", "Conduct change impact analysis", "Assess feedback and develop CM strategy & roadmap", "Prepare/deliver executive readout for alignment"], outputs: ["Sponsor engagement plan", "Case for Change", "CM strategy, plan, and roadmap", "Executive read out"] },
+           3: { objectives: "Confirm tech readiness and deliver POV identifying critical use cases for training alignment to ensure success.", activities: ["Align on technical reqs & assess timing of readiness", "Conduct discovery workshops (Value, Metrics, Biz use cases)", "Establish knowledge repository", "Deliver Eng. office hours", "License reduction database management", "Deep dive biz use case testing", "Cloud economics capabilities assessment", "Develop cloud governance framework", "Develop CoE charter framework", "Collaborate on periodic executive leader updates"], outputs: ["Tech alignment", "Use case ID & prioritization (AI & WT)", "Knowledge/resource center", "License database tracker/testing", "Success metrics (KPIs)", "Engineering value reinforcement", "Executive read out/alignment", "CoE Charter Recommendations"] },
+           4: { objectives: "Develop change plans and build advocacy to support training to drive adoption and ensure governance.", activities: ["Develop communication plan", "Develop training outline and plan", "Develop support plan", "Develop license reduction plan", "Establish & activate ambassador network", "Discuss governance guardrails", "Develop training materials + promo videos and clean recordings", "Disseminate key messages", "Conduct end-user training", "Executive CoE charter framework & recommendations"], outputs: ["Detailed change plans", "Key messages doc", "High-level FAQ doc", "Ambassador network", "Governance recommendations", "Training materials", "End-user training delivery", "Adapt license reduction plan", "Operationalize CoE", "Adapt change tactics and plans"] },
+           5: { objectives: "Sustain adoption through continuous improvement, performance tracking, and formal project closure.", activities: ["Conduct office hours sessions", "Active CoE guardrails", "Collect feedback & monitor progress", "Measure performance", "Deliver final executive readout", "Conduct knowledge transfer", "Conduct retrospective"], outputs: ["Training reinforcement (ofc hrs)", "Assess feedback findings", "Adapt change plans", "Performance reports", "Executive final readout", "Customer handoff", "Project closed & retrospective"] }
+         },
+         wt: {
+           1: { objectives: "Establish foundational structure and define the change approach/journey.", activities: ["Client research/discovery: Artifact dig (websites, resources)", "Review sales-related resources and inputs", "Attend internal handoff and readiness meetings", "Develop change profile: Confirm sponsor and key leaders", "Assess case for change and define change approach", "Initiate change artifacts: Initiate C&T plan"], outputs: ["Client change profile", "Change approach", "Executive sponsor identified", "C&T plan customizations"] },
+           2: { objectives: "Establish project foundation and secure executive alignment to define the initial change management strategy.", activities: ["Support development of kickoff deck and delivery", "Schedule/conduct sponsor alignment meeting", "Schedule/conduct key stakeholder interviews", "Conduct assessments (Tech, Inventory, Readiness, Maturity, Security, Training)", "Conduct change impact analysis", "Assess feedback and develop CM strategy & roadmap", "Prepare/deliver executive readout for alignment"], outputs: ["Sponsor engagement plan", "Case for Change", "CM strategy, plan, and roadmap", "Executive readout"] },
+           3: { objectives: "Confirm tech readiness and deliver POV identifying critical use cases for training alignment to ensure success.", activities: ["Align on technical reqs & assess timing of readiness", "Conduct discovery workshops (Value, Metrics, Biz use cases)", "Establish knowledge repository", "Deliver Eng. office hours", "License reduction database management", "Deep dive biz use case testing", "Cloud economics capabilities assessment", "Develop cloud governance framework", "Develop CoE charter framework", "Collaborate on periodic executive leader updates"], outputs: ["Tech alignment", "Use case ID & prioritization (AI & WT)", "Knowledge/resource center", "License database tracker/testing", "Success metrics (KPIs)", "Engineering value reinforcement", "Executive readout/alignment", "CoE Charter Recommendations"] },
+           4: { objectives: "Develop change plans and build advocacy to support training to drive adoption and ensure governance.", activities: ["Develop communication plan", "Develop training outline and plan", "Develop support plan", "Develop license reduction plan", "Establish & activate ambassador network", "Discuss governance guardrails", "Develop training materials + promo videos and clean recordings", "Disseminate key messages", "Conduct end-user training", "Executive CoE charter framework & recommendations"], outputs: ["Detailed change plans", "Key messages & high-level FAQ doc", "Ambassador network", "Governance recommendations", "Training materials & end-user training delivery", "Adapt license reduction plan", "Operationalize CoE", "Adapt change tactics and plans"] },
+           5: { objectives: "Sustain adoption through continuous improvement, performance tracking, and formal project closure.", activities: ["Conduct office hours sessions", "Active CoE guardrails", "Collect feedback & monitor progress", "Measure performance", "Deliver final executive readout", "Conduct knowledge transfer", "Conduct retrospective"], outputs: ["Training reinforcement (Office hours)", "Assess feedback findings", "Adapt change plans", "Performance reports", "Executive final readout", "Customer handoff", "Project closed & retrospective"] }
+         },
+         ai: {
+           1: { objectives: "Establish foundational structure and define the change approach/journey.", activities: ["Client research/discovery: Artifact dig (websites, resources)", "Review sales-related resources and inputs", "Attend internal handoff and readiness meetings", "Develop change profile: Confirm sponsor and key leaders", "Assess case for change and define change approach", "Initiate change artifacts: Initiate C&T plan"], outputs: ["Client change profile", "Change approach", "Executive sponsor identified", "C&T plan customizations"] },
+           2: { objectives: "Establish project foundation and secure executive alignment to define the initial change management strategy.", activities: ["Support development of kickoff deck and delivery", "Schedule/conduct sponsor alignment meeting", "Schedule/conduct key stakeholder interviews", "Conduct assessments (Tech environment, Application inventory, Readiness, Maturity, Security, Training)", "Conduct change impact analysis", "Assess feedback and develop CM strategy & roadmap", "Prepare/deliver executive readout for alignment"], outputs: ["Sponsor engagement plan", "Case for Change", "CM strategy, plan, and roadmap", "Executive readout"] },
+           3: { objectives: "Confirm tech readiness and deliver POV identifying critical use cases for training alignment to ensure success.", activities: ["Align on technical reqs & assess timing of readiness", "Conduct discovery workshops (Value, Metrics, Biz use cases)", "Establish knowledge repository", "Deliver Eng. office hours", "License reduction database management", "Deep dive biz use case testing", "Cloud economics capabilities assessment", "Develop cloud governance framework", "Develop CoE charter framework", "Collaborate on periodic executive leader updates"], outputs: ["Tech alignment", "Use case ID & prioritization (AI & WT)", "Knowledge/resource center", "License database tracker/testing", "Success metrics (KPIs)", "Engineering value reinforcement", "Executive readout/alignment", "CoE Charter Recommendations"] },
+           4: { objectives: "Develop change plans and build advocacy to support training to drive adoption and ensure governance.", activities: ["Develop communication plan", "Develop training outline and plan", "Develop support plan", "Develop license reduction plan", "Establish & activate ambassador network", "Discuss governance guardrails", "Develop training materials + promo videos and clean recordings", "Disseminate key messages", "Conduct end-user training", "Executive CoE charter framework & recommendations"], outputs: ["Detailed change plans", "Key messages doc", "High-level FAQ doc", "Ambassador network", "Governance recommendations", "Training materials", "End-user training delivery", "Adapt license reduction plan", "Operationalize CoE", "Adapt change tactics and plans"] },
+           5: { objectives: "Sustain adoption through continuous improvement, performance tracking, and formal project closure.", activities: ["Conduct office hours sessions", "Active CoE guardrails", "Collect feedback & monitor progress", "Measure performance", "Deliver final executive readout", "Conduct knowledge transfer", "Conduct retrospective"], outputs: ["Training reinforcement (Office hours)", "Assess feedback findings", "Adapt change plans", "Performance reports", "Executive final readout", "Customer handoff", "Project closed & retrospective"] }
+         },
+         ccoe: {
+           1: { objectives: "Establish foundational structure and define the change approach/journey.", activities: ["Client research/discovery: Artifact dig (websites, resources)", "Review sales-related resources and inputs", "Attend internal handoff and readiness meetings", "Develop change profile: Confirm sponsor and key leaders", "Assess case for change and define change approach", "Initiate change artifacts: Initiate C&T plan"], outputs: ["Client change profile", "Change approach", "Executive sponsor identified", "C&T plan customizations"] },
+           2: { objectives: "Establish project foundation and secure executive alignment to define the initial change management strategy.", activities: ["Support development of kickoff deck and delivery", "Schedule/conduct sponsor alignment meeting", "Schedule/conduct key stakeholder interviews", "Conduct assessments (tech environment, application inventory, org readiness, cloud maturity, skills/competencies, security, training)", "Conduct change impact analysis", "Assess all feedback and develop change management strategy & roadmap", "Prepare/deliver executive readout for alignment"], outputs: ["Sponsor engagement plan", "Case for Change", "CM strategy, plan, and roadmap", "Executive read out"] },
+           3: { objectives: "Confirm tech readiness and deliver POV identifying critical use cases for training alignment to ensure success.", activities: ["Align on technical reqs & assess timing of readiness", "Conduct discovery workshops (value, metrics, biz use cases)", "Establish knowledge repository", "Deliver Eng. office hours", "License reduction database management", "Deep dive biz use case testing", "Cloud economics capabilities assessment", "Develop cloud governance framework", "Develop CoE charter framework", "Collaborate on periodic executive leader updates"], outputs: ["Tech alignment", "Use case ID & prioritization (AI & WT)", "Knowledge/resource center", "License database tracker/testing", "Success metrics (KPIs)", "Engineering value reinforcement", "Executive read out/alignment", "CoE Charter Recommendations"] },
+           4: { objectives: "Develop change plans and build advocacy to support training to drive adoption and ensure governance.", activities: ["Develop communication plan", "Develop training outline and plan", "Develop support plan", "Develop license reduction plan", "Establish & activate ambassador network", "Discuss governance guardrails", "Develop training materials + promo videos and clean recordings", "Disseminate key messages", "Conduct end-user training", "Executive CoE charter framework & recommendations"], outputs: ["Detailed change plans", "Key messages doc", "High-level FAQ doc", "Ambassador network", "Governance recommendations", "Training materials", "End-user training delivery", "Adapt license reduction plan", "Operationalize CoE", "Adapt change tactics and plans"] },
+           5: { objectives: "Sustain adoption through continuous improvement, performance tracking, and formal project closure.", activities: ["Conduct office hours sessions", "Active CoE guardrails", "Collect feedback & monitor progress", "Measure performance", "Deliver final executive readout", "Conduct knowledge transfer", "Conduct retrospective"], outputs: ["Training reinforcement (ofc hrs)", "Assess feedback findings", "Adapt change plans", "Performance reports", "Executive final readout", "Customer handoff", "Project closed & retrospective"] }
+         },
+         gcp: {
+           1: { objectives: "Establish foundational structure and define the change approach/journey.", activities: ["Client research/discovery: Artifact dig (websites, resources)", "Review sales-related resources and inputs", "Attend internal handoff and readiness meetings", "Develop change profile: Confirm sponsor and key leaders", "Assess case for change and define change approach", "Initiate change artifacts: Initiate C&T plan"], outputs: ["Client change profile", "Change approach", "Executive sponsor identified", "C&T plan customizations"] },
+           2: { objectives: "Establish project foundation and secure executive alignment to define the initial change management strategy.", activities: ["Support development of kickoff deck and delivery", "Schedule/conduct sponsor alignment meeting", "Schedule/conduct key stakeholder interviews", "Conduct assessments (tech environment, application inventory, org readiness, cloud maturity, skills/competencies, security, training)", "Conduct change impact analysis", "Assess all feedback and develop change management strategy & roadmap", "Prepare/deliver executive readout for alignment"], outputs: ["Sponsor engagement plan", "Case for Change", "CM strategy, plan, and roadmap", "Executive read out"] },
+           3: { objectives: "Confirm tech readiness and deliver POV identifying critical use cases for training alignment to ensure success.", activities: ["Align on technical reqs & assess timing of readiness", "Conduct discovery workshops (value, metrics, biz use cases)", "Establish knowledge repository", "Deliver Eng. office hours", "License reduction database management", "Deep dive biz use case testing", "Cloud economics capabilities assessment", "Develop cloud governance framework", "Develop CoE charter framework", "Collaborate on periodic executive leader updates"], outputs: ["Tech alignment", "Use case ID & prioritization (AI & WT)", "Knowledge/resource center", "License database tracker/testing", "Success metrics (KPIs)", "Engineering value reinforcement", "Executive read out/alignment", "CoE Charter Recommendations"] },
+           4: { objectives: "Develop change plans and build advocacy to support training to drive adoption and ensure governance.", activities: ["Develop communication plan", "Develop training outline and plan", "Develop support plan", "Develop license reduction plan", "Establish & activate ambassador network", "Discuss governance guardrails", "Develop training materials + promo videos and clean recordings", "Disseminate key messages", "Conduct end-user training", "Executive CoE charter framework & recommendations"], outputs: ["Detailed change plans", "Key messages doc", "High-level FAQ doc", "Ambassador network", "Governance recommendations", "Training materials", "End-user training delivery", "Adapt license reduction plan", "Operationalize CoE", "Adapt change tactics and plans"] },
+           5: { objectives: "Sustain adoption through continuous improvement, performance tracking, and formal project closure.", activities: ["Conduct office hours sessions", "Active CoE guardrails", "Collect feedback & monitor progress", "Measure performance", "Deliver final executive readout", "Conduct knowledge transfer", "Conduct retrospective"], outputs: ["Training reinforcement (ofc hrs)", "Assess feedback findings", "Adapt change plans", "Performance reports", "Executive final readout", "Customer handoff", "Project closed & retrospective"] }
+         },
+         default: { objectives: "Establish a clear path for success by defining project scope and aligning critical resources.", activities: ["Stakeholder Alignment", "Resource Planning", "Metric Definition"], outputs: ["Technical Roadmap", "Stakeholder Registry", "Charter"] }
+       };
+
+
+       const PROJECTS = [
+         { id: 'mcc', label: 'MCC', icon: 'Briefcase', color: 'bg-[#00d2ff]' },
+         { id: 'wt', label: 'WORK TRANSFORMATION', icon: 'Users', color: 'bg-[#ff61d8]' },
+         { id: 'ai', label: 'GEMINI / AI', icon: 'Sparkles', color: 'bg-[#ffcc00]' },
+         { id: 'ccoe', label: 'CCOE', icon: 'Settings', color: 'bg-[#4dfa75]' },
+         { id: 'gcp', label: 'GCP', icon: 'Cloud', color: 'bg-[#33aaff]' },
+       ];
+
+
+       const STAGES = [
+         { id: 1, name: 'Planning', type: 'cookie', pos: { x: '15%', y: '80%' } },
+         { id: 2, name: 'Align / Strategy', type: 'candy', pos: { x: '35%', y: '45%' } },
+         { id: 3, name: 'Implementation', type: 'chocolate', pos: { x: '55%', y: '72%' } },
+         { id: 4, name: 'Manage / Execution', type: 'lollipop', pos: { x: '75%', y: '53%' } },
+         { id: 5, name: 'Adopt / Sustain', type: 'cupcake', pos: { x: '88%', y: '25%' } },
+       ];
+
+
+       // --- Main App Component ---
+       function App() {
+         const [screen, setScreen] = useState('landing');
+         const [selectedProject, setSelectedProject] = useState(null);
+         const [activeStage, setActiveStage] = useState(null);
+
+
+         const handleSelect = (project) => { setSelectedProject(project); setScreen('map'); };
+         const handleBack = () => { setScreen('landing'); setSelectedProject(null); };
+
+
+         return (
+           <div className="min-h-screen w-full bg-[#fff0f6] overflow-hidden text-[#333] relative select-none">
+             <style>{`
+               .pixel-border { box-shadow: 0 -4px 0 0 #000, 0 4px 0 0 #000, -4px 0 0 0 #000, 4px 0 0 0 #000; }
+               .pixel-btn-shadow { box-shadow: 6px 6px 0px 0px rgba(0,0,0,0.15); }
+               .pixel-btn-shadow:active { box-shadow: 0px 0px 0px 0px rgba(0,0,0,0); transform: translate(6px, 6px); }
+               @keyframes pixel-float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+               .pixel-float { animation: pixel-float 2s steps(4) infinite; }
+               .sugar-path { filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.1)); }
+               .pixel-scroll::-webkit-scrollbar { width: 8px; }
+               .pixel-scroll::-webkit-scrollbar-track { background: #fdf2f8; border-left: 2px solid black; }
+               .pixel-scroll::-webkit-scrollbar-thumb { background: #ff61d8; border: 2px solid black; }
+             `}</style>
+
+
+             <div className="absolute inset-0 pointer-events-none opacity-[0.05]" style={{ backgroundImage: `url("https://www.transparenttextures.com/patterns/p6.png")` }}></div>
+
+
+             {screen === 'landing' ? (
+               <LandingScreen onSelect={handleSelect} />
+             ) : (
+               <MapScreen project={selectedProject} onBack={handleBack} onStageClick={setActiveStage} />
+             )}
+
+
+             {activeStage && (
+               <Modal stage={activeStage} projectId={selectedProject.id} onClose={() => setActiveStage(null)} />
+             )}
+           </div>
+         );
+       }
+
+
+       function LandingScreen({ onSelect }) {
+         return (
+           <div className="flex flex-col items-center justify-center min-h-screen p-4 relative z-10">
+             <div className="mb-16 text-center">
+               <h1 className="text-3xl md:text-5xl text-[#ff61d8] mb-6 leading-tight drop-shadow-[4px_4px_0px_#00d2ff]">SELECT YOUR<br/>JOURNEY</h1>
+               <p className="text-[10px] md:text-xs text-[#00d2ff] tracking-widest leading-loose uppercase font-bold max-w-2xl mx-auto">The path to sweet success of Advisory & Change Management</p>
+             </div>
+             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-8 max-w-6xl w-full px-4">
+               {PROJECTS.map((p) => (
+                 <button key={p.id} onClick={() => onSelect(p)} className="group relative flex flex-col items-center p-6 bg-white border-4 border-black pixel-btn-shadow hover:bg-pink-50 transition-all">
+                   <div className={`w-16 h-16 ${p.color} border-4 border-black flex items-center justify-center mb-4 transform group-hover:rotate-12 transition-transform`}>
+                     <i data-lucide={p.icon.toLowerCase()} className="w-8 h-8 text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)]"></i>
+                   </div>
+                   <span className="text-[10px] text-center leading-relaxed font-bold">{p.label}</span>
+                 </button>
+               ))}
+             </div>
+           </div>
+         );
+       }
+
+
+       function MapScreen({ project, onBack, onStageClick }) {
+         React.useEffect(() => { lucide.createIcons(); }, []);
+         const renderIcon = (type, className) => {
+           switch(type) {
+             case 'cookie': return <PixelCookie className={className} />;
+             case 'candy': return <PixelCandy className={className} />;
+             case 'chocolate': return <PixelChocolate className={className} />;
+             case 'lollipop': return <PixelLollipop className={className} />;
+             case 'cupcake': return <PixelCupcake className={className} />;
+             default: return null;
+           }
+         };
+
+
+         return (
+           <div className="relative w-full h-screen flex flex-col p-6">
+             <div className="flex items-center justify-between mb-6 z-10">
+               <button onClick={onBack} className="px-6 py-2 bg-[#ff61d8] border-4 border-black pixel-btn-shadow text-[8px] text-white uppercase font-bold">{"<"} BACK</button>
+               <div className="px-6 py-2 bg-white border-4 border-black text-[#333] text-[8px] uppercase font-bold flex items-center gap-2">
+                 <span className="text-[#00d2ff]">MAP:</span> {project.label}
+               </div>
+             </div>
+             <div className="flex-1 relative bg-[#e0fff0] border-4 border-black overflow-hidden sugar-path shadow-inner">
+               <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: 'radial-gradient(#ff61d8 2px, transparent 2px)', backgroundSize: '32px 32px' }}></div>
+               <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+                 <path d="M 100,500 L 250,500 L 250,300 L 450,300 L 450,450 L 650,450 L 650,200 L 850,200 L 850,400 L 1100,400" fill="none" stroke="#fff" strokeWidth="40" style={{ strokeLinejoin: 'miter' }} />
+                 <path d="M 100,500 L 250,500 L 250,300 L 450,300 L 450,450 L 650,450 L 650,200 L 850,200 L 850,400 L 1100,400" fill="none" stroke="#ffccf9" strokeWidth="10" strokeDasharray="15 15" style={{ strokeLinejoin: 'miter' }} />
+               </svg>
+               {STAGES.map((stage) => (
+                 <div key={stage.id} style={{ left: stage.pos.x, top: stage.pos.y }} className="absolute transform -translate-x-1/2 -translate-y-1/2 z-20 group cursor-pointer" onClick={() => onStageClick(stage)}>
+                   <div className="flex flex-col items-center">
+                     <div className="mb-2 bg-black text-white text-[7px] px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pixel-border">{stage.name}</div>
+                     <div className="w-16 h-16 pixel-float" style={{ animationDelay: `${stage.id * 0.2}s` }}>
+                       {renderIcon(stage.type, "w-full h-full drop-shadow-[4px_4px_0px_rgba(0,0,0,0.15)]")}
+                     </div>
+                   </div>
+                 </div>
+               ))}
+               <div className="absolute bottom-10 left-10 text-[10px] text-[#ff61d8] font-bold">START!</div>
+               <div className="absolute top-16 right-10 text-[10px] text-[#00d2ff] font-bold animate-pulse">FINISH!!</div>
+             </div>
+           </div>
+         );
+       }
+
+
+       function Modal({ stage, projectId, onClose }) {
+         const content = (JOURNEY_DATA[projectId] && JOURNEY_DATA[projectId][stage.id]) ? JOURNEY_DATA[projectId][stage.id] : JOURNEY_DATA.default;
+         const renderIcon = (type, className) => {
+           switch(type) {
+             case 'cookie': return <PixelCookie className={className} />;
+             case 'candy': return <PixelCandy className={className} />;
+             case 'chocolate': return <PixelChocolate className={className} />;
+             case 'lollipop': return <PixelLollipop className={className} />;
+             case 'cupcake': return <PixelCupcake className={className} />;
+             default: return null;
+           }
+         };
+
+
+         return (
+           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#ff61d8]/20 backdrop-blur-sm">
+             <div className="bg-white w-full max-w-lg border-4 border-black pixel-btn-shadow relative overflow-hidden flex flex-col max-h-[85vh]">
+               <div className="shrink-0 h-2 flex"><div className="flex-1 bg-[#ff61d8]"></div><div className="flex-1 bg-[#00d2ff]"></div><div className="flex-1 bg-[#ffcc00]"></div><div className="flex-1 bg-[#4dfa75]"></div></div>
+               <button onClick={onClose} className="absolute top-6 right-6 text-black hover:text-[#ff61d8] z-10"><i data-lucide="x"></i></button>
+               <div className="shrink-0 p-8 pb-4 flex items-center gap-6 border-b-4 border-gray-100">
+                 <div className="w-20 h-20 shrink-0">{renderIcon(stage.type, "w-full h-full")}</div>
+                 <div>
+                   <div className="text-[8px] text-[#ff61d8] mb-2 uppercase font-bold tracking-widest">Stage {stage.id}</div>
+                   <h2 className="text-sm text-[#333] leading-relaxed uppercase">{stage.name}</h2>
+                 </div>
+               </div>
+               <div className="flex-1 overflow-y-auto p-8 pt-6 space-y-8 pixel-scroll">
+                 <section>
+                   <h3 className="text-[10px] text-[#00d2ff] mb-3 uppercase font-bold">Objectives</h3>
+                   <p className="text-[9px] leading-loose text-gray-500 uppercase">{content.objectives}</p>
+                 </section>
+                 <section>
+                   <h3 className="text-[10px] text-[#4dfa75] mb-3 uppercase font-bold">Key Activities</h3>
+                   <div className="space-y-3">
+                     {content.activities.map((act, i) => (
+                       <div key={i} className="flex items-start gap-3 text-[8px] text-gray-700 bg-gray-50 p-2 border-2 border-gray-100">
+                         <span className="text-[#ff61d8] font-bold shrink-0">{">"}</span> {act.toUpperCase()}
+                       </div>
+                     ))}
+                   </div>
+                 </section>
+                 <section>
+                   <h3 className="text-[10px] text-[#ff61d8] mb-3 uppercase font-bold">Outputs</h3>
+                   <div className="space-y-3">
+                     {content.outputs.map((out, i) => (
+                       <div key={i} className="flex items-start gap-3 text-[8px] text-gray-700 bg-pink-50/30 p-2 border-2 border-pink-100">
+                         <span className="text-[#00d2ff] font-bold shrink-0">[*]</span> {out.toUpperCase()}
+                       </div>
+                     ))}
+                   </div>
+                 </section>
+               </div>
+               <div className="shrink-0 p-8 pt-0">
+                 <button onClick={onClose} className="w-full py-4 bg-[#ffcc00] border-4 border-black pixel-btn-shadow text-[10px] text-black font-bold uppercase hover:bg-yellow-300">[ CONTINUE QUEST ]</button>
+               </div>
+             </div>
+           </div>
+         );
+       }
+
+
+       const root = ReactDOM.createRoot(document.getElementById('root'));
+       root.render(<App />);
+   </script>
+</body>
+</html>
